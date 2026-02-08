@@ -86,11 +86,11 @@ showdown.subParser('makeMarkdown.table',
       return txt;
     }
 
-    // count the first row. We need it to trim the table (if table rows have inconsistent number of columns)
-    colCount = rows[0].length;
-
     // let's shift the first row as a heading
     headings = rows.shift();
+    
+    // count columns based on the headings row
+    colCount = headings.length;
 
     for (i = 0; i < headings.length; ++i) {
       var headContent = showdown.subParser('makeMarkdown.tableCell')(headings[i], globals),

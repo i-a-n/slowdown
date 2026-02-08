@@ -371,12 +371,13 @@ showdown.Converter = function (converterOptions) {
     var doc = showdown.helper.document.createElement('div');
     doc.innerHTML = src;
 
+    // remove all newlines and collapse spaces before substituting pre tags
+    // this prevents issues with consecutive pre tags being affected by whitespace removal
+    clean(doc);
+
     var globals = {
       preList: substitutePreCodeTags(doc)
     };
-
-    // remove all newlines and collapse spaces
-    clean(doc);
 
     // some stuff, like accidental reference links must now be escaped
     // TODO
@@ -416,13 +417,13 @@ showdown.Converter = function (converterOptions) {
 
       for (var i = 0; i < pres.length; ++i) {
 
-        if (pres[i].childElementCount === 1 && pres[i].firstChild.tagName.toLowerCase() === 'code') {
-          var content = pres[i].firstChild.innerHTML.trim(),
-              language = pres[i].firstChild.getAttribute('data-language') || '';
+        if (pres[i].childElementCount === 1 && pres[i].firstElementChild && pres[i].firstElementChild.tagName.toLowerCase() === 'code') {
+          var content = pres[i].firstElementChild.innerHTML.trim(),
+              language = pres[i].firstElementChild.getAttribute('data-language') || '';
 
           // if data-language attribute is not defined, then we look for class language-*
           if (language === '') {
-            var classes = pres[i].firstChild.className.split(' ');
+            var classes = pres[i].firstElementChild.className.split(' ');
             for (var c = 0; c < classes.length; ++c) {
               var matches = classes[c].match(/^language-(.+)$/);
               if (matches !== null) {
