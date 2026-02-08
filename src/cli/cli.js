@@ -5,8 +5,8 @@ var fs = require('fs'),
     path = require('path'),
     Command = require('commander').Command,
     program = new Command(),
-    path1 = path.resolve(__dirname + '/../dist/showdown.js'),
-    path2 = path.resolve(__dirname + '/../../.build/showdown.js'),
+    path1 = path.resolve(__dirname + '/../dist/slowdown.js'),
+    path2 = path.resolve(__dirname + '/../../.build/slowdown.js'),
     showdown,
     version;
 
@@ -21,14 +21,14 @@ if (fs.existsSync(path1)) {
   version = require(path.resolve(__dirname + '/../../package.json')).version;
 } else {
   // cold testing (manual) of cli.js in the src file. We load the dist file
-  showdown = require('../../dist/showdown');
+  showdown = require('../../dist/slowdown');
   version = require('../../package.json');
 }
 
 
 program
-  .name('showdown')
-  .description('CLI to Showdownjs markdown parser v' + version)
+  .name('slowdown')
+  .description('CLI to Slowdown HTML-to-Markdown parser v' + version)
   .version(version)
   .usage('<command> [options]')
   .option('-q, --quiet', 'Quiet mode. Only print errors')

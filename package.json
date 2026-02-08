@@ -37,12 +37,12 @@
     "web": "https://github.com/i-a-n/slowdown"
   },
   "license": "MIT",
-  "main": "./dist/showdown.js",
+  "main": "./dist/slowdown.js",
   "scripts": {
     "test": "grunt test"
   },
   "bin": {
-    "showdown": "bin/showdown.js"
+    "slowdown": "bin/slowdown.js"
   },
   "files": [
     "bin",

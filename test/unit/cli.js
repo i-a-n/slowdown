@@ -41,7 +41,7 @@ describe('showdown cli', function () {
     it('should display help if no commands are specified', function () {
       var proc = spawnCLI(null, [], {});
       proc.status.should.equal(1);
-      proc.stderr.should.contain('CLI to Showdownjs markdown parser');
+      proc.stderr.should.contain('CLI to Slowdown HTML-to-Markdown parser');
       proc.stderr.should.contain('Usage:');
       proc.stderr.should.contain('Options:');
       proc.stderr.should.contain('Commands:');
@@ -52,7 +52,7 @@ describe('showdown cli', function () {
       it('should display help', function () {
         var proc = spawnCLI(null, ['-h'], {});
         proc.status.should.equal(0);
-        proc.stdout.should.contain('CLI to Showdownjs markdown parser');
+        proc.stdout.should.contain('CLI to Slowdown HTML-to-Markdown parser');
         proc.stdout.should.contain('Usage:');
         proc.stdout.should.contain('Options:');
         proc.stdout.should.contain('Commands:');

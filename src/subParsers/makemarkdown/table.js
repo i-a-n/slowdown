@@ -88,7 +88,7 @@ showdown.subParser('makeMarkdown.table',
 
     // let's shift the first row as a heading
     headings = rows.shift();
-    
+
     // count columns based on the headings row
     colCount = headings.length;
 

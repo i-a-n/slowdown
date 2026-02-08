@@ -44,7 +44,7 @@ module.exports = function (grunt) {
         src: [
           'src/cli/cli.js'
         ],
-        dest: 'bin/showdown.js'
+        dest: 'bin/slowdown.js'
       },
       test: {
         src: '<%= concat.dist.src %>',
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
           banner: '#!/usr/bin/env node'
         },
         files: {
-          'bin/showdown.js': ['<%= concat.cli.dest %>']
+          'bin/slowdown.js': ['<%= concat.cli.dest %>']
         }
       }
     },
