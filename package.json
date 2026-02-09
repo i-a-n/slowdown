@@ -1,14 +1,15 @@
 {
   "name": "slowdown",
-  "version": "1.0.0",
-  "description": "HTML to Markdown converter (fork of Showdown with bug fixes)",
+  "version": "2.0.0",
+  "description": "HTML to Markdown converter (focused fork of Showdown with bug fixes)",
   "author": "Estevão Santos",
   "homepage": "https://github.com/i-a-n/slowdown",
   "keywords": [
     "markdown",
     "html",
     "converter",
-    "html-to-markdown"
+    "html-to-markdown",
+    "html2md"
   ],
   "contributors": [
     "John Gruber",

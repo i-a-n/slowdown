@@ -1,4 +1,4 @@
-showdown.subParser('makeMarkdown.break', function () {
+slowdown.subParser('makeMarkdown.break', function () {
   'use strict';
 
   return '  \n';

@@ -1,4 +1,4 @@
-showdown.subParser('makeMarkdown.codeBlock', function (node, options, globals) {
+slowdown.subParser('makeMarkdown.codeBlock', function (node, options, globals) {
   'use strict';
 
   var lang = node.getAttribute('language'),

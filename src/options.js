@@ -23,7 +23,7 @@ function getDefaultOpts (simple) {
     },
     rawPrefixHeaderId: {
       defaultValue: false,
-      describe: 'Setting this option to true will prevent showdown from modifying the prefix. This might result in malformed IDs (if, for instance, the " char is used in the prefix)',
+      describe: 'Setting this option to true will prevent slowdown from modifying the prefix. This might result in malformed IDs (if, for instance, the " char is used in the prefix)',
       type: 'boolean'
     },
     ghCompatibleHeaderId: {

@@ -1,5 +1,9 @@
 /**
  * Created by Tivie on 12-11-2014.
+ *
+ * TODO: Modernize build system
+ * This Gruntfile is kept for compatibility but should be replaced with
+ * modern tooling like esbuild, rollup, or simple npm scripts in a future release.
  */
 
 module.exports = function (grunt) {
@@ -31,9 +35,8 @@ module.exports = function (grunt) {
         },
         src: [
           'src/options.js',
-          'src/showdown.js',
+          'src/slowdown.js',
           'src/helpers.js',
-          'src/subParsers/makehtml/*.js',
           'src/subParsers/makemarkdown/*.js',
           'src/converter.js',
           'src/loader.js'

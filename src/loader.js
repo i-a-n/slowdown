@@ -4,14 +4,14 @@ var root = this;
 if (typeof define === 'function' && define.amd) {
   define(function () {
     'use strict';
-    return showdown;
+    return slowdown;
   });
 
 // CommonJS/nodeJS Loader
 } else if (typeof module !== 'undefined' && module.exports) {
-  module.exports = showdown;
+  module.exports = slowdown;
 
 // Regular Browser loader
 } else {
-  root.showdown = showdown;
+  root.slowdown = slowdown;
 }

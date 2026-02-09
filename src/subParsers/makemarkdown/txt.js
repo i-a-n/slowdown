@@ -1,4 +1,4 @@
-showdown.subParser('makeMarkdown.txt', function (node) {
+slowdown.subParser('makeMarkdown.txt', function (node) {
   'use strict';
 
   var txt = node.nodeValue;
@@ -10,7 +10,7 @@ showdown.subParser('makeMarkdown.txt', function (node) {
   txt = txt.replace(/¨NBSP;/g, ' ');
 
   // ", <, > and & should replace escaped html entities
-  txt = showdown.helper.unescapeHTMLEntities(txt);
+  txt = slowdown.helper.unescapeHTMLEntities(txt);
 
   // escape markdown magic characters
   // emphasis, strong and strikethrough - can appear everywhere

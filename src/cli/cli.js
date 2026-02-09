@@ -7,21 +7,21 @@ var fs = require('fs'),
     program = new Command(),
     path1 = path.resolve(__dirname + '/../dist/slowdown.js'),
     path2 = path.resolve(__dirname + '/../../.build/slowdown.js'),
-    showdown,
+    slowdown,
     version;
 
 // require shodown. We use conditional loading for each use case
 if (fs.existsSync(path1)) {
   // production. File lives in bin directory
-  showdown = require(path1);
+  slowdown = require(path1);
   version = require(path.resolve(__dirname + '/../package.json')).version;
 } else if (fs.existsSync(path2)) {
   // testing envo, uses the concatenated stuff for testing
-  showdown = require(path2);
+  slowdown = require(path2);
   version = require(path.resolve(__dirname + '/../../package.json')).version;
 } else {
   // cold testing (manual) of cli.js in the src file. We load the dist file
-  showdown = require('../../dist/slowdown');
+  slowdown = require('../../dist/slowdown');
   version = require('../../package.json');
 }
 
@@ -38,12 +38,12 @@ program.command('makehtml')
   .description('Converts markdown into html')
 
   .addHelpText('after', '\n\nExamples:')
-  .addHelpText('after', '  showdown makehtml -i                     Reads from stdin and outputs to stdout')
-  .addHelpText('after', '  showdown makehtml -i foo.md -o bar.html  Reads \'foo.md\' and writes to \'bar.html\'')
-  .addHelpText('after', '  showdown makehtml -i --flavor="github"   Parses stdin using GFM style')
+  .addHelpText('after', '  slowdown makehtml -i                     Reads from stdin and outputs to stdout')
+  .addHelpText('after', '  slowdown makehtml -i foo.md -o bar.html  Reads \'foo.md\' and writes to \'bar.html\'')
+  .addHelpText('after', '  slowdown makehtml -i --flavor="github"   Parses stdin using GFM style')
 
   .addHelpText('after', '\nNote for windows users:')
-  .addHelpText('after', 'When reading from stdin, use option -u to set the proper encoding or run `chcp 65001` prior to calling showdown cli to set the command line to utf-8')
+  .addHelpText('after', 'When reading from stdin, use option -u to set the proper encoding or run `chcp 65001` prior to calling slowdown cli to set the command line to utf-8')
 
   .option('-i, --input [file]', 'Input source. Usually a md file. If omitted or empty, reads from stdin. Windows users see note below.', true)
   .option('-o, --output [file]', 'Output target. Usually a html file. If omitted or empty, writes to stdout', true)
@@ -52,8 +52,8 @@ program.command('makehtml')
   .option('-a, --append', 'Append data to output instead of overwriting. Ignored if writing to stdout', false)
   .option('-e, --extensions <extensions...>', 'Load the specified extensions. Should be valid paths to node compatible extensions')
   .option('-p, --flavor <flavor>', 'Run with a predetermined flavor of options. Default is vanilla', 'vanilla')
-  .option('-c, --config <config...>', 'Enables showdown makehtml parser config options. Overrides flavor')
-  .option('--config-help', 'Shows configuration options for showdown parser')
+  .option('-c, --config <config...>', 'Enables slowdown makehtml parser config options. Overrides flavor')
+  .option('--config-help', 'Shows configuration options for slowdown parser')
   .action(makehtmlCommand);
 
 program.parse();
@@ -80,7 +80,7 @@ function Messenger (writeMode, supress, mute) {
   this.errorExit = function (e) {
     if (!mute) {
       console.error('ERROR: ' + e.message);
-      console.error('Run \'showdown <command> -h\' for help');
+      console.error('Run \'slowdown <command> -h\' for help');
     }
     process.exit(1);
   };
@@ -110,28 +110,28 @@ function Messenger (writeMode, supress, mute) {
 }
 
 /**
- * Helper function to show Showdown Options
+ * Helper function to show Slowdown Options
  */
-function showShowdownOptions () {
+function showSlowdownOptions () {
   'use strict';
-  var showdownOptions = showdown.getDefaultOptions(false);
-  console.log('\nshowdown makehtml config options:');
-  // show showdown options
-  for (var sopt in showdownOptions) {
-    if (showdownOptions.hasOwnProperty(sopt)) {
-      console.log('  ' + sopt + ':', '[default=' + showdownOptions[sopt].defaultValue + ']',showdownOptions[sopt].describe);
+  var slowdownOptions = slowdown.getDefaultOptions(false);
+  console.log('\nslowdown makehtml config options:');
+  // show slowdown options
+  for (var sopt in slowdownOptions) {
+    if (slowdownOptions.hasOwnProperty(sopt)) {
+      console.log('  ' + sopt + ':', '[default=' + slowdownOptions[sopt].defaultValue + ']',slowdownOptions[sopt].describe);
     }
   }
-  console.log('\n\nExample: showdown makehtml -c openLinksInNewWindow ghMentions ghMentionsLink="https://google.com"');
+  console.log('\n\nExample: slowdown makehtml -c openLinksInNewWindow ghMentions ghMentionsLink="https://google.com"');
 }
 
 /**
- * Helper function to parse showdown options
+ * Helper function to parse slowdown options
  * @param {{}} configOptions
  * @param {{}} defaultOptions
  * @returns {{}}
  */
-function parseShowdownOptions (configOptions, defaultOptions) {
+function parseSlowdownOptions (configOptions, defaultOptions) {
   'use strict';
   var shOpt = defaultOptions;
 
@@ -225,9 +225,9 @@ function writeToFile (html, file, append) {
 function makehtmlCommand (options, cmd) {
   'use strict';
 
-  // show configuration options for showdown helper if configHelp was passed
+  // show configuration options for slowdown helper if configHelp was passed
   if (options.configHelp) {
-    showShowdownOptions();
+    showSlowdownOptions();
     return;
   }
 
@@ -238,13 +238,13 @@ function makehtmlCommand (options, cmd) {
       msgMode = (writeMode === 'file') ? 'stdout' : 'stderr',
       // initiate Messenger helper, can maybe be replaced with commanderjs internal stuff
       messenger = new Messenger(msgMode, quiet, mute),
-      defaultOptions = showdown.getDefaultOptions(true),
+      defaultOptions = slowdown.getDefaultOptions(true),
       md, html;
 
   // deal with flavor first since config flag overrides flavor individual options
   if (options.flavor) {
     messenger.printMsg('Enabling flavor ' + options.flavor + '...');
-    defaultOptions = showdown.getFlavorOptions(options.flavor);
+    defaultOptions = slowdown.getFlavorOptions(options.flavor);
     if (!defaultOptions) {
       messenger.errorExit(new Error('Flavor ' + options.flavor + ' is not recognised'));
       return;
@@ -252,7 +252,7 @@ function makehtmlCommand (options, cmd) {
     messenger.printMsg('OK!');
   }
   // store config options in the options.config as an object
-  options.config = parseShowdownOptions(options.config, defaultOptions);
+  options.config = parseSlowdownOptions(options.config, defaultOptions);
 
   // print enabled options
   for (var o in options.config) {
@@ -265,7 +265,7 @@ function makehtmlCommand (options, cmd) {
   messenger.printMsg('\nInitializing converter...');
   var converter;
   try {
-    converter = new showdown.Converter(options.config);
+    converter = new slowdown.Converter(options.config);
   } catch (e) {
     messenger.errorExit(e);
     return;

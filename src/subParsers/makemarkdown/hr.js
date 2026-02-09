@@ -1,4 +1,4 @@
-showdown.subParser('makeMarkdown.hr', function () {
+slowdown.subParser('makeMarkdown.hr', function () {
   'use strict';
 
   return '---';

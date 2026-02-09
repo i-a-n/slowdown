@@ -3,12 +3,12 @@
  */
 
 /**
- * Showdown Converter class
+ * Slowdown Converter class
  * @class
  * @param {object} [converterOptions]
  * @returns {Converter}
  */
-showdown.Converter = function (converterOptions) {
+slowdown.Converter = function (converterOptions) {
   'use strict';
 
   var
@@ -83,7 +83,7 @@ showdown.Converter = function (converterOptions) {
     }
 
     if (options.extensions) {
-      showdown.helper.forEach(options.extensions, _parseExtension);
+      slowdown.helper.forEach(options.extensions, _parseExtension);
     }
   }
 
@@ -97,19 +97,19 @@ showdown.Converter = function (converterOptions) {
 
     name = name || null;
     // If it's a string, the extension was previously loaded
-    if (showdown.helper.isString(ext)) {
-      ext = showdown.helper.stdExtName(ext);
+    if (slowdown.helper.isString(ext)) {
+      ext = slowdown.helper.stdExtName(ext);
       name = ext;
 
       // LEGACY_SUPPORT CODE
-      if (showdown.extensions[ext]) {
+      if (slowdown.extensions[ext]) {
         console.warn('DEPRECATION WARNING: ' + ext + ' is an old extension that uses a deprecated loading method.' +
           'Please inform the developer that the extension should be updated!');
-        legacyExtensionLoading(showdown.extensions[ext], ext);
+        legacyExtensionLoading(slowdown.extensions[ext], ext);
         return;
         // END LEGACY SUPPORT CODE
 
-      } else if (!showdown.helper.isUndefined(extensions[ext])) {
+      } else if (!slowdown.helper.isUndefined(extensions[ext])) {
         ext = extensions[ext];
 
       } else {
@@ -121,7 +121,7 @@ showdown.Converter = function (converterOptions) {
       ext = ext();
     }
 
-    if (!showdown.helper.isArray(ext)) {
+    if (!slowdown.helper.isArray(ext)) {
       ext = [ext];
     }
 
@@ -159,9 +159,9 @@ showdown.Converter = function (converterOptions) {
    */
   function legacyExtensionLoading (ext, name) {
     if (typeof ext === 'function') {
-      ext = ext(new showdown.Converter());
+      ext = ext(new slowdown.Converter());
     }
-    if (!showdown.helper.isArray(ext)) {
+    if (!slowdown.helper.isArray(ext)) {
       ext = [ext];
     }
     var valid = validate(ext, name);
@@ -190,7 +190,7 @@ showdown.Converter = function (converterOptions) {
    * @param {function} callback
    */
   function listen (name, callback) {
-    if (!showdown.helper.isString(name)) {
+    if (!slowdown.helper.isString(name)) {
       throw Error('Invalid argument in converter.listen() method: name must be a string, but ' + typeof name + ' given');
     }
 
@@ -204,12 +204,6 @@ showdown.Converter = function (converterOptions) {
     listeners[name].push(callback);
   }
 
-  function rTrimInputText (text) {
-    var rsp = text.match(/^\s*/)[0].length,
-        rgx = new RegExp('^\\s{0,' + rsp + '}', 'gm');
-    return text.replace(rgx, '');
-  }
-
   /**
    *
    * @param {string} evtName Event name
@@ -217,7 +211,7 @@ showdown.Converter = function (converterOptions) {
    * @param {{}} options Converter Options
    * @param {{}} globals Converter globals
    * @param {{}} [pParams] extra params for event
-   * @returns showdown.helper.Event
+   * @returns slowdown.helper.Event
    * @private
    */
   this._dispatch = function dispatch (evtName, text, options, globals, pParams) {
@@ -227,7 +221,7 @@ showdown.Converter = function (converterOptions) {
     params.text = text;
     params.options = options;
     params.globals = globals;
-    var event = new showdown.helper.Event(evtName, text, params);
+    var event = new slowdown.helper.Event(evtName, text, params);
 
     if (listeners.hasOwnProperty(evtName)) {
       for (var ei = 0; ei < listeners[evtName].length; ++ei) {
@@ -244,112 +238,11 @@ showdown.Converter = function (converterOptions) {
    * Listen to an event
    * @param {string} name
    * @param {function} callback
-   * @returns {showdown.Converter}
+   * @returns {slowdown.Converter}
    */
   this.listen = function (name, callback) {
     listen(name, callback);
     return this;
-  };
-
-  /**
-   * Converts a markdown string into HTML string
-   * @param {string} text
-   * @returns {*}
-   */
-  this.makeHtml = function (text) {
-    //check if text is not falsy
-    if (!text) {
-      return text;
-    }
-
-    var globals = {
-      gHtmlBlocks:     [],
-      gHtmlMdBlocks:   [],
-      gHtmlSpans:      [],
-      gUrls:           {},
-      gTitles:         {},
-      gDimensions:     {},
-      gListLevel:      0,
-      hashLinkCounts:  {},
-      langExtensions:  langExtensions,
-      outputModifiers: outputModifiers,
-      converter:       this,
-      ghCodeBlocks:    [],
-      metadata: {
-        parsed: {},
-        raw: '',
-        format: ''
-      }
-    };
-
-    // This lets us use ¨ trema as an escape char to avoid md5 hashes
-    // The choice of character is arbitrary; anything that isn't
-    // magic in Markdown will work.
-    text = text.replace(/¨/g, '¨T');
-
-    // Replace $ with ¨D
-    // RegExp interprets $ as a special character
-    // when it's in a replacement string
-    text = text.replace(/\$/g, '¨D');
-
-    // Standardize line endings
-    text = text.replace(/\r\n/g, '\n'); // DOS to Unix
-    text = text.replace(/\r/g, '\n'); // Mac to Unix
-
-    // Stardardize line spaces
-    text = text.replace(/\u00A0/g, '&nbsp;');
-
-    if (options.smartIndentationFix) {
-      text = rTrimInputText(text);
-    }
-
-    // Make sure text begins and ends with a couple of newlines:
-    text = '\n\n' + text + '\n\n';
-
-    // detab
-    text = showdown.subParser('makehtml.detab')(text, options, globals);
-
-    /**
-     * Strip any lines consisting only of spaces and tabs.
-     * This makes subsequent regexs easier to write, because we can
-     * match consecutive blank lines with /\n+/ instead of something
-     * contorted like /[ \t]*\n+/
-     */
-    text = text.replace(/^[ \t]+$/mg, '');
-
-    //run languageExtensions
-    showdown.helper.forEach(langExtensions, function (ext) {
-      text = showdown.subParser('makehtml.runExtension')(ext, text, options, globals);
-    });
-
-    // run the sub parsers
-    text = showdown.subParser('makehtml.metadata')(text, options, globals);
-    text = showdown.subParser('makehtml.hashPreCodeTags')(text, options, globals);
-    text = showdown.subParser('makehtml.githubCodeBlocks')(text, options, globals);
-    text = showdown.subParser('makehtml.hashHTMLBlocks')(text, options, globals);
-    text = showdown.subParser('makehtml.hashCodeTags')(text, options, globals);
-    text = showdown.subParser('makehtml.stripLinkDefinitions')(text, options, globals);
-    text = showdown.subParser('makehtml.blockGamut')(text, options, globals);
-    text = showdown.subParser('makehtml.unhashHTMLSpans')(text, options, globals);
-    text = showdown.subParser('makehtml.unescapeSpecialChars')(text, options, globals);
-
-    // attacklab: Restore dollar signs
-    text = text.replace(/¨D/g, '$$');
-
-    // attacklab: Restore tremas
-    text = text.replace(/¨T/g, '¨');
-
-    // render a complete html document instead of a partial if the option is enabled
-    text = showdown.subParser('makehtml.completeHTMLDocument')(text, options, globals);
-
-    // Run output modifiers
-    showdown.helper.forEach(outputModifiers, function (ext) {
-      text = showdown.subParser('makehtml.runExtension')(ext, text, options, globals);
-    });
-
-    // update metadata
-    metadata = globals.metadata;
-    return text;
   };
 
   /**
@@ -368,7 +261,7 @@ showdown.Converter = function (converterOptions) {
     // ex: <em>this is</em> <strong>sparta</strong>
     src = src.replace(/>[ \t]+</, '>¨NBSP;<');
 
-    var doc = showdown.helper.document.createElement('div');
+    var doc = slowdown.helper.document.createElement('div');
     doc.innerHTML = src;
 
     // remove all newlines and collapse spaces before substituting pre tags
@@ -387,7 +280,7 @@ showdown.Converter = function (converterOptions) {
         mdDoc = '';
 
     for (var i = 0; i < nodes.length; i++) {
-      mdDoc += showdown.subParser('makeMarkdown.node')(nodes[i], options, globals);
+      mdDoc += slowdown.subParser('makeMarkdown.node')(nodes[i], options, globals);
     }
 
     function clean (node) {
@@ -434,7 +327,7 @@ showdown.Converter = function (converterOptions) {
           }
 
           // unescape html entities in content
-          content = showdown.helper.unescapeHTMLEntities(content);
+          content = slowdown.helper.unescapeHTMLEntities(content);
 
           presPH.push(content);
           pres[i].outerHTML = '<precode language="' + language + '" precodenum="' + i.toString() + '"></precode>';
@@ -526,7 +419,7 @@ showdown.Converter = function (converterOptions) {
    * @param {Array} extension
    */
   this.removeExtension = function (extension) {
-    if (!showdown.helper.isArray(extension)) {
+    if (!slowdown.helper.isArray(extension)) {
       extension = [extension];
     }
     for (var a = 0; a < extension.length; ++a) {

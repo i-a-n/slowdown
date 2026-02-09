@@ -1,4 +1,4 @@
-showdown.subParser('makeMarkdown.links', function (node, options, globals) {
+slowdown.subParser('makeMarkdown.links', function (node, options, globals) {
   'use strict';
 
   var txt = '';
@@ -14,13 +14,13 @@ showdown.subParser('makeMarkdown.links', function (node, options, globals) {
     var classes = node.getAttribute('class');
     if (options.ghMentions && /(?:^| )user-mention\b/.test(classes)) {
       for (var ii = 0; ii < childrenLength; ++ii) {
-        txt += showdown.subParser('makeMarkdown.node')(children[ii], options, globals);
+        txt += slowdown.subParser('makeMarkdown.node')(children[ii], options, globals);
       }
 
     } else {
       txt = '[';
       for (var i = 0; i < childrenLength; ++i) {
-        txt += showdown.subParser('makeMarkdown.node')(children[i], options, globals);
+        txt += slowdown.subParser('makeMarkdown.node')(children[i], options, globals);
       }
       txt += '](';
       txt += '<' + node.getAttribute('href') + '>';

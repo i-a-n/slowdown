@@ -1,19 +1,19 @@
 /**
- * showdownjs helper functions
+ * slowdownjs helper functions
  */
 
-if (!showdown.hasOwnProperty('helper')) {
-  showdown.helper = {};
+if (!slowdown.hasOwnProperty('helper')) {
+  slowdown.helper = {};
 }
 
 if (typeof this === 'undefined' && typeof window !== 'undefined') {
-  showdown.helper.document = window.document;
+  slowdown.helper.document = window.document;
 } else {
   if (typeof this.document === 'undefined' && typeof this.window === 'undefined') {
     var jsdom = require('jsdom');
     this.window = new jsdom.JSDOM('', {}).window; // jshint ignore:line
   }
-  showdown.helper.document = this.window.document;
+  slowdown.helper.document = this.window.document;
 }
 
 /**
@@ -22,7 +22,7 @@ if (typeof this === 'undefined' && typeof window !== 'undefined') {
  * @param {string} a
  * @returns {boolean}
  */
-showdown.helper.isString = function (a) {
+slowdown.helper.isString = function (a) {
   'use strict';
   return (typeof a === 'string' || a instanceof String);
 };
@@ -33,7 +33,7 @@ showdown.helper.isString = function (a) {
  * @param {*} a
  * @returns {boolean}
  */
-showdown.helper.isFunction = function (a) {
+slowdown.helper.isFunction = function (a) {
   'use strict';
   var getType = {};
   return a && getType.toString.call(a) === '[object Function]';
@@ -45,7 +45,7 @@ showdown.helper.isFunction = function (a) {
  * @param {*} a
  * @returns {boolean}
  */
-showdown.helper.isArray = function (a) {
+slowdown.helper.isArray = function (a) {
   'use strict';
   let isArray;
   if (!Array.isArray) {
@@ -64,7 +64,7 @@ showdown.helper.isArray = function (a) {
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
  */
-showdown.helper.isUndefined = function (value) {
+slowdown.helper.isUndefined = function (value) {
   'use strict';
   return typeof value === 'undefined';
 };
@@ -76,24 +76,24 @@ showdown.helper.isUndefined = function (value) {
  * @param {*} obj
  * @param {function} callback Accepts 3 params: 1. value, 2. key, 3. the original array/object
  */
-showdown.helper.forEach = function (obj, callback) {
+slowdown.helper.forEach = function (obj, callback) {
   'use strict';
   // check if obj is defined
-  if (showdown.helper.isUndefined(obj)) {
+  if (slowdown.helper.isUndefined(obj)) {
     throw new Error('obj param is required');
   }
 
-  if (showdown.helper.isUndefined(callback)) {
+  if (slowdown.helper.isUndefined(callback)) {
     throw new Error('callback param is required');
   }
 
-  if (!showdown.helper.isFunction(callback)) {
+  if (!slowdown.helper.isFunction(callback)) {
     throw new Error('callback param must be a function/closure');
   }
 
   if (typeof obj.forEach === 'function') {
     obj.forEach(callback);
-  } else if (showdown.helper.isArray(obj)) {
+  } else if (slowdown.helper.isArray(obj)) {
     for (var i = 0; i < obj.length; i++) {
       callback(obj[i], i, obj);
     }
@@ -114,7 +114,7 @@ showdown.helper.forEach = function (obj, callback) {
  * @param {string} s extension name
  * @returns {string}
  */
-showdown.helper.stdExtName = function (s) {
+slowdown.helper.stdExtName = function (s) {
   'use strict';
   return s.replace(/[_?*+\/\\.^-]/g, '').replace(/\s/g, '').toLowerCase();
 };
@@ -132,7 +132,7 @@ function escapeCharactersCallback (wholeMatch, m1) {
  * @param {string} m1
  * @returns {string}
  */
-showdown.helper.escapeCharactersCallback = escapeCharactersCallback;
+slowdown.helper.escapeCharactersCallback = escapeCharactersCallback;
 
 /**
  * Escape characters in a string
@@ -142,7 +142,7 @@ showdown.helper.escapeCharactersCallback = escapeCharactersCallback;
  * @param {boolean} afterBackslash
  * @returns {string|void|*}
  */
-showdown.helper.escapeCharacters = function (text, charsToEscape, afterBackslash) {
+slowdown.helper.escapeCharacters = function (text, charsToEscape, afterBackslash) {
   'use strict';
   // First we have to escape the escape characters so that
   // we can build a character class out of them
@@ -225,7 +225,7 @@ var rgxFindMatchPos = function (str, left, right, flags) {
  * matchRecursiveRegExp("<div id=\"x\">test</div>", "<div\\b[^>]*>", "</div>", "gi")
  * returns: ["test"]
  */
-showdown.helper.matchRecursiveRegExp = function (str, left, right, flags) {
+slowdown.helper.matchRecursiveRegExp = function (str, left, right, flags) {
   'use strict';
 
   var matchPos = rgxFindMatchPos (str, left, right, flags),
@@ -251,10 +251,10 @@ showdown.helper.matchRecursiveRegExp = function (str, left, right, flags) {
  * @param {string} flags
  * @returns {string}
  */
-showdown.helper.replaceRecursiveRegExp = function (str, replacement, left, right, flags) {
+slowdown.helper.replaceRecursiveRegExp = function (str, replacement, left, right, flags) {
   'use strict';
 
-  if (!showdown.helper.isFunction(replacement)) {
+  if (!slowdown.helper.isFunction(replacement)) {
     var repStr = replacement;
     replacement = function () {
       return repStr;
@@ -301,13 +301,13 @@ showdown.helper.replaceRecursiveRegExp = function (str, replacement, left, right
  * @returns {Number}
  * @throws InvalidArgumentError
  */
-showdown.helper.regexIndexOf = function (str, regex, fromIndex) {
+slowdown.helper.regexIndexOf = function (str, regex, fromIndex) {
   'use strict';
-  if (!showdown.helper.isString(str)) {
-    throw 'InvalidArgumentError: first parameter of showdown.helper.regexIndexOf function must be a string';
+  if (!slowdown.helper.isString(str)) {
+    throw 'InvalidArgumentError: first parameter of slowdown.helper.regexIndexOf function must be a string';
   }
   if (!(regex instanceof RegExp)) {
-    throw 'InvalidArgumentError: second parameter of showdown.helper.regexIndexOf function must be an instance of RegExp';
+    throw 'InvalidArgumentError: second parameter of slowdown.helper.regexIndexOf function must be an instance of RegExp';
   }
   var indexOf = str.substring(fromIndex || 0).search(regex);
   return (indexOf >= 0) ? (indexOf + (fromIndex || 0)) : indexOf;
@@ -320,10 +320,10 @@ showdown.helper.regexIndexOf = function (str, regex, fromIndex) {
  * @returns {[string,string]}
  * @throws InvalidArgumentError
  */
-showdown.helper.splitAtIndex = function (str, index) {
+slowdown.helper.splitAtIndex = function (str, index) {
   'use strict';
-  if (!showdown.helper.isString(str)) {
-    throw 'InvalidArgumentError: first parameter of showdown.helper.regexIndexOf function must be a string';
+  if (!slowdown.helper.isString(str)) {
+    throw 'InvalidArgumentError: first parameter of slowdown.helper.regexIndexOf function must be a string';
   }
   return [str.substring(0, index), str.substring(index)];
 };
@@ -374,7 +374,7 @@ function mulberry32 (a) {
  * @param {string} mail
  * @returns {string}
  */
-showdown.helper.encodeEmailAddress = function (mail) {
+slowdown.helper.encodeEmailAddress = function (mail) {
   'use strict';
   var encode = [
     function (ch) {
@@ -415,10 +415,10 @@ showdown.helper.encodeEmailAddress = function (mail) {
  * @param {int} count
  * @returns {string}
  */
-showdown.helper.repeat = function (str, count) {
+slowdown.helper.repeat = function (str, count) {
   'use strict';
   // use built-in method if it's available
-  if (!showdown.helper.isUndefined(String.prototype.repeat)) {
+  if (!slowdown.helper.isUndefined(String.prototype.repeat)) {
     return str.repeat(count);
   }
   str = '' + str;
@@ -458,7 +458,7 @@ showdown.helper.repeat = function (str, count) {
  * @param {string} [padString]
  * @returns {string}
  */
-showdown.helper.padEnd = function padEnd (str, targetLength, padString) {
+slowdown.helper.padEnd = function padEnd (str, targetLength, padString) {
   'use strict';
   /*jshint bitwise: false*/
   // eslint-disable-next-line space-infix-ops
@@ -470,7 +470,7 @@ showdown.helper.padEnd = function padEnd (str, targetLength, padString) {
   } else {
     targetLength = targetLength - str.length;
     if (targetLength > padString.length) {
-      padString += showdown.helper.repeat(padString, targetLength / padString.length); //append to original to ensure we are longer than needed
+      padString += slowdown.helper.repeat(padString, targetLength / padString.length); //append to original to ensure we are longer than needed
     }
     return String(str) + padString.slice(0,targetLength);
   }
@@ -481,7 +481,7 @@ showdown.helper.padEnd = function padEnd (str, targetLength, padString) {
  * @param txt
  * @returns {string}
  */
-showdown.helper.unescapeHTMLEntities = function (txt) {
+slowdown.helper.unescapeHTMLEntities = function (txt) {
   'use strict';
 
   return txt
@@ -491,7 +491,7 @@ showdown.helper.unescapeHTMLEntities = function (txt) {
     .replace(/&amp;/g, '&');
 };
 
-showdown.helper._hashHTMLSpan = function (html, globals) {
+slowdown.helper._hashHTMLSpan = function (html, globals) {
   return '¨C' + (globals.gHtmlSpans.push(html) - 1) + 'C';
 };
 
@@ -502,7 +502,7 @@ showdown.helper._hashHTMLSpan = function (html, globals) {
  * @param {string} url the path to modify, which may be relative
  * @returns {string} the full URL
  */
-showdown.helper.applyBaseUrl = function (baseUrl, url) {
+slowdown.helper.applyBaseUrl = function (baseUrl, url) {
   // Only prepend if given a base URL and the path is not absolute.
   if (baseUrl && !this.isAbsolutePath(url)) {
     var urlResolve = require('url').resolve;
@@ -518,19 +518,19 @@ showdown.helper.applyBaseUrl = function (baseUrl, url) {
  * @param {string} path the path to test for absolution
  * @returns {boolean} `true` if the given path is absolute, else `false`
  */
-showdown.helper.isAbsolutePath = function (path) {
+slowdown.helper.isAbsolutePath = function (path) {
   // Absolute paths begin with '[protocol:]//' or '#' (anchors)
   return /(^([a-z]+:)?\/\/)|(^#)/i.test(path);
 };
 
 /**
- * Showdown's Event Object
+ * Slowdown's Event Object
  * @param {string} name Name of the event
  * @param {string} text Text
  * @param {{}} params optional. params of the event
  * @constructor
  */
-showdown.helper.Event = function (name, text, params) {
+slowdown.helper.Event = function (name, text, params) {
   'use strict';
 
   var regexp = params.regexp || null;
@@ -641,7 +641,7 @@ if (!Math.imul) {
  * Common regexes.
  * We declare some common regexes to improve performance
  */
-showdown.helper.regexes = {
+slowdown.helper.regexes = {
   asteriskDashTildeAndColon: /([*_:~])/g,
   asteriskDashAndTilde:      /([*_~])/g
 };
@@ -649,7 +649,7 @@ showdown.helper.regexes = {
 /**
  * EMOJIS LIST
  */
-showdown.helper.emojis = {
+slowdown.helper.emojis = {
   '100': '\ud83d\udcaf',
   '1234': '\ud83d\udd22',
   '+1': '\ud83d\udc4d',
@@ -2451,5 +2451,5 @@ showdown.helper.emojis = {
   'shipit': '<img width="20" height="20" align="absmiddle" src="https://github.githubassets.com/images/icons/emoji/shipit.png?v8">',
   'suspect': '<img width="20" height="20" align="absmiddle" src="https://github.githubassets.com/images/icons/emoji/suspect.png?v8">',
   'trollface': '<img width="20" height="20" align="absmiddle" src="https://github.githubassets.com/images/icons/emoji/trollface.png?v8">',
-  'showdown': '<img width="20" height="20" align="absmiddle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAS1BMVEX///8jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS3b1q3b1q3b1q3b1q3b1q3b1q3b1q3b1q0565CIAAAAGXRSTlMAQHCAYCCw/+DQwPCQUBAwoHCAEP+wwFBgS2fvBgAAAUZJREFUeAHs1cGy7BAUheFFsEDw/k97VTq3T6ge2EmdM+pvrP6Iwd74XV9Kb52xuMU4/uc1YNgZLFOeV8FGdhGrNk5SEgUyPxAEdj4LlMRDyhVAMVEa2M7TBSeVZAFPdqHgzSZJwPKgcLFLAooHDJo4EDCw4gAtBoJA5UFj4Ng5LOGLwVXZuoIlji/jeQHFk7+baHxrCjeUwB9+s88KndvlhcyBN5BSkYNQIVVb4pV+Npm7hhuKDs/uMP5KxT3WzSNNLIuuoDpMmuAVMruMSeDyQBi24DTr43LAY7ILA1QYaWkgfHzFthYYzg67SQsCbB8GhJUEGCtO9n0rSaCLxgJQjS/JSgMTg2eBDEHAJ+H350AsjYNYscrErgI2e/l+mdR967TCX/v6N0EhPECYCP0i+IAoYQOE8BogNhQMEMdrgAQWHaMAAGi5I5euoY9NAAAAAElFTkSuQmCC">'
+  'slowdown': '<img width="20" height="20" align="absmiddle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAS1BMVEX///8jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS0jJS3b1q3b1q3b1q3b1q3b1q3b1q3b1q3b1q0565CIAAAAGXRSTlMAQHCAYCCw/+DQwPCQUBAwoHCAEP+wwFBgS2fvBgAAAUZJREFUeAHs1cGy7BAUheFFsEDw/k97VTq3T6ge2EmdM+pvrP6Iwd74XV9Kb52xuMU4/uc1YNgZLFOeV8FGdhGrNk5SEgUyPxAEdj4LlMRDyhVAMVEa2M7TBSeVZAFPdqHgzSZJwPKgcLFLAooHDJo4EDCw4gAtBoJA5UFj4Ng5LOGLwVXZuoIlji/jeQHFk7+baHxrCjeUwB9+s88KndvlhcyBN5BSkYNQIVVb4pV+Npm7hhuKDs/uMP5KxT3WzSNNLIuuoDpMmuAVMruMSeDyQBi24DTr43LAY7ILA1QYaWkgfHzFthYYzg67SQsCbB8GhJUEGCtO9n0rSaCLxgJQjS/JSgMTg2eBDEHAJ+H350AsjYNYscrErgI2e/l+mdR967TCX/v6N0EhPECYCP0i+IAoYQOE8BogNhQMEMdrgAQWHaMAAGi5I5euoY9NAAAAAElFTkSuQmCC">'
 };

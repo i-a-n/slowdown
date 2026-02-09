@@ -1,4 +1,4 @@
-showdown.subParser('makeMarkdown.image', function (node) {
+slowdown.subParser('makeMarkdown.image', function (node) {
   'use strict';
 
   var txt = '';

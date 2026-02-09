@@ -3,7 +3,7 @@
  */
 
 var bootstrap = require('./makemarkdown.bootstrap.js'),
-    converter = new bootstrap.showdown.Converter(),
+    converter = new bootstrap.slowdown.Converter(),
     assertion = bootstrap.assertion,
     testsuite = bootstrap.getTestSuite('test/functional/makemarkdown/cases/standard/');
 

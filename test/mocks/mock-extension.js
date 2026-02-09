@@ -1,4 +1,4 @@
-var showdown = require('../../.build/showdown.js');
+var slowdown = require('../../.build/slowdown.js');
 
 var ext = {
   type: 'lang',
@@ -6,7 +6,7 @@ var ext = {
   replace: 'bar'
 };
 
-showdown.extension('mockextension', function () {
+slowdown.extension('mockextension', function () {
   'use strict';
   return [ext];
 });

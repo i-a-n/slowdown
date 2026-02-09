@@ -1,4 +1,4 @@
-showdown.subParser('makeMarkdown.table',
+slowdown.subParser('makeMarkdown.table',
   /**
    *
    * @param {DocumentFragment} node
@@ -93,7 +93,7 @@ showdown.subParser('makeMarkdown.table',
     colCount = headings.length;
 
     for (i = 0; i < headings.length; ++i) {
-      var headContent = showdown.subParser('makeMarkdown.tableCell')(headings[i], globals),
+      var headContent = slowdown.subParser('makeMarkdown.tableCell')(headings[i], globals),
           align = '---';
 
       if (headings[i].hasAttribute('style')) {
@@ -123,7 +123,7 @@ showdown.subParser('makeMarkdown.table',
         if (typeof rows[i][ii] !== 'undefined') {
           // Note: if rows[i][ii] is undefined, it means the row has fewer elements than the header,
           // and empty content will be added
-          cellContent = showdown.subParser('makeMarkdown.tableCell')(rows[i][ii], globals);
+          cellContent = slowdown.subParser('makeMarkdown.tableCell')(rows[i][ii], globals);
         }
         tableArray[r].push(cellContent);
       }
@@ -144,13 +144,13 @@ showdown.subParser('makeMarkdown.table',
       for (ii = 0; ii < tableArray[i].length; ++ii) {
         if (i === 1) {
           if (tableArray[i][ii].slice(-1) === ':') {
-            tableArray[i][ii] = showdown.helper.padEnd(tableArray[i][ii].slice(0, -1), cellSpacesCount - 1, '-') + ':';
+            tableArray[i][ii] = slowdown.helper.padEnd(tableArray[i][ii].slice(0, -1), cellSpacesCount - 1, '-') + ':';
           } else {
-            tableArray[i][ii] = showdown.helper.padEnd(tableArray[i][ii], cellSpacesCount, '-');
+            tableArray[i][ii] = slowdown.helper.padEnd(tableArray[i][ii], cellSpacesCount, '-');
           }
 
         } else {
-          tableArray[i][ii] = showdown.helper.padEnd(tableArray[i][ii], cellSpacesCount);
+          tableArray[i][ii] = slowdown.helper.padEnd(tableArray[i][ii], cellSpacesCount);
         }
       }
       txt += '| ' + tableArray[i].join(' | ') + ' |\n';

@@ -67,7 +67,7 @@
     getTestSuite: getTestSuite,
     assertion: assertion,
     normalize: normalize,
-    showdown: require('../../../.build/showdown.js')
+    slowdown: require('../../../.build/slowdown.js')
   };
 })();
 

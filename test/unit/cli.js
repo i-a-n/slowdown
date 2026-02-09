@@ -33,7 +33,7 @@ function spawnCLI (command, args, options) {
   return {stdout: stdout, stderr: stderr, output: output, status: status};
 }
 
-describe('showdown cli', function () {
+describe('slowdown cli', function () {
   'use strict';
 
   describe('without commands', function () {
@@ -119,7 +119,7 @@ describe('showdown cli', function () {
         proc.stdout.should.equal('<p>this is a :smile:</p>');
       });
 
-      it('should enable a showdown option', function () {
+      it('should enable a slowdown option', function () {
         var proc = spawnCLI('makehtml', ['-c', 'emoji'], {
           input: 'this is a :smile:',
           encoding: 'utf-8'
