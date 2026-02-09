@@ -6,26 +6,6 @@ if (!slowdown.hasOwnProperty('helper')) {
   slowdown.helper = {};
 }
 
-if (typeof this === 'undefined' && typeof window !== 'undefined') {
-  slowdown.helper.document = window.document;
-} else {
-  if (typeof this.document === 'undefined' && typeof this.window === 'undefined') {
-    try {
-      var jsdom = require('jsdom');
-      this.window = new jsdom.JSDOM('', {}).window; // jshint ignore:line
-    } catch (e) {
-      // jsdom not available (e.g., in browser without bundler polyfills)
-      // Fall back to global window if available
-      if (typeof window !== 'undefined') {
-        this.window = window;
-      } else {
-        throw new Error('slowdown requires either a browser environment or jsdom to be installed');
-      }
-    }
-  }
-  slowdown.helper.document = this.window.document;
-}
-
 /**
  * Check if var is string
  * @static

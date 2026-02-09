@@ -591,26 +591,6 @@ if (!slowdown.hasOwnProperty('helper')) {
   slowdown.helper = {};
 }
 
-if (typeof this === 'undefined' && typeof window !== 'undefined') {
-  slowdown.helper.document = window.document;
-} else {
-  if (typeof this.document === 'undefined' && typeof this.window === 'undefined') {
-    try {
-      var jsdom = require('jsdom');
-      this.window = new jsdom.JSDOM('', {}).window; // jshint ignore:line
-    } catch (e) {
-      // jsdom not available (e.g., in browser without bundler polyfills)
-      // Fall back to global window if available
-      if (typeof window !== 'undefined') {
-        this.window = window;
-      } else {
-        throw new Error('slowdown requires either a browser environment or jsdom to be installed');
-      }
-    }
-  }
-  slowdown.helper.document = this.window.document;
-}
-
 /**
  * Check if var is string
  * @static
@@ -3923,9 +3903,10 @@ slowdown.Converter = function (converterOptions) {
   /**
    * Converts an HTML string into a markdown string
    * @param src
+   * @param [HTMLParser] A WHATWG DOM and HTML parser, such as JSDOM. If none is supplied, window.document will be used.
    * @returns {string}
    */
-  this.makeMarkdown = function (src) {
+  this.makeMarkdown = function (src, HTMLParser) {
 
     // replace \r\n with \n
     src = src.replace(/\r\n/g, '\n');
@@ -3936,7 +3917,15 @@ slowdown.Converter = function (converterOptions) {
     // ex: <em>this is</em> <strong>sparta</strong>
     src = src.replace(/>[ \t]+</, '>¨NBSP;<');
 
-    var doc = slowdown.helper.document.createElement('div');
+    if (!HTMLParser) {
+      if (window && window.document) {
+        HTMLParser = window.document;
+      } else {
+        throw new Error('HTMLParser is undefined. If in a webworker or nodejs environment, you need to provide a WHATWG DOM and HTML parser such as JSDOM');
+      }
+    }
+
+    var doc = HTMLParser.createElement('div');
     doc.innerHTML = src;
 
     // remove all newlines and collapse spaces before substituting pre tags

@@ -248,9 +248,10 @@ slowdown.Converter = function (converterOptions) {
   /**
    * Converts an HTML string into a markdown string
    * @param src
+   * @param [HTMLParser] A WHATWG DOM and HTML parser, such as JSDOM. If none is supplied, window.document will be used.
    * @returns {string}
    */
-  this.makeMarkdown = function (src) {
+  this.makeMarkdown = function (src, HTMLParser) {
 
     // replace \r\n with \n
     src = src.replace(/\r\n/g, '\n');
@@ -261,7 +262,15 @@ slowdown.Converter = function (converterOptions) {
     // ex: <em>this is</em> <strong>sparta</strong>
     src = src.replace(/>[ \t]+</, '>¨NBSP;<');
 
-    var doc = slowdown.helper.document.createElement('div');
+    if (!HTMLParser) {
+      if (window && window.document) {
+        HTMLParser = window.document;
+      } else {
+        throw new Error('HTMLParser is undefined. If in a webworker or nodejs environment, you need to provide a WHATWG DOM and HTML parser such as JSDOM');
+      }
+    }
+
+    var doc = HTMLParser.createElement('div');
     doc.innerHTML = src;
 
     // remove all newlines and collapse spaces before substituting pre tags

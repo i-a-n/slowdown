@@ -41,7 +41,7 @@
 
   function assertion (testCase, converter) {
     return function () {
-      testCase.actual = converter.makeMarkdown(testCase.input);
+      testCase.actual = converter.makeMarkdown(testCase.input, global.jsdomDocument);
       testCase = normalize(testCase);
 
       // Compare

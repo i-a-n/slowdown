@@ -15,7 +15,7 @@ describe('slowdown.Converter', function () {
       let html = '<a href="/somefoo.html">a link</a>\n';
       let md   = '[a link](</somefoo.html>)';
 
-      converter.makeMarkdown(html).should.equal(md);
+      converter.makeMarkdown(html, global.jsdomDocument).should.equal(md);
     });
 
   });
