@@ -39,6 +39,9 @@
   },
   "license": "MIT",
   "main": "./dist/slowdown.js",
+  "browser": {
+    "jsdom": false
+  },
   "scripts": {
     "test": "grunt test"
   },
@@ -78,7 +81,9 @@
     "source-map-support": "^0.5.21"
   },
   "dependencies": {
-    "commander": "^9.0.0",
+    "commander": "^9.0.0"
+  },
+  "optionalDependencies": {
     "jsdom": "^26.1.0"
   },
   "overrides": {
