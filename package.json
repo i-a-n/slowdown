@@ -79,7 +79,7 @@
   },
   "dependencies": {
     "commander": "^9.0.0",
-    "jsdom": "^19.0.0"
+    "jsdom": "^26.1.0"
   },
   "overrides": {
     "minimist": "^1.2.6"

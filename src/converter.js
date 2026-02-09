@@ -295,7 +295,10 @@ slowdown.Converter = function (converterOptions) {
             child.nodeValue = child.nodeValue.replace(/(\s)+/g, '$1');
           }
         } else if (child.nodeType === 1) {
-          clean(child);
+          // Skip <pre> elements - they should preserve whitespace
+          if (child.tagName && child.tagName.toLowerCase() !== 'pre') {
+            clean(child);
+          }
         }
       }
     }
