@@ -163,15 +163,6 @@ module.exports = function (grunt) {
           reporter: 'spec',
           require: ['test/bootstrap.js']
         }
-      },
-      cli: {
-        src: 'test/unit/cli.js',
-        options: {
-          timeout: 3000,
-          ignoreLeaks: false,
-          reporter: 'spec',
-          require: ['test/bootstrap.js']
-        }
       }
     }
   };
@@ -198,16 +189,6 @@ module.exports = function (grunt) {
   });
 
   /**
-   * Performance task
-   */
-  grunt.registerTask('performancejs', function () {
-    'use strict';
-    var perf = require('./test/performance/performance.js');
-    perf.runTests();
-    perf.generateLogs();
-  });
-
-  /**
    * Run a single test
    */
   grunt.registerTask('single-test', function (file) {
@@ -229,12 +210,10 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['clean', 'lint', 'concat:test', 'mochaTest:unit', 'mochaTest:functional', 'clean']);
   grunt.registerTask('test-functional', ['concat:test', 'mochaTest:functional', 'clean']);
   grunt.registerTask('test-unit', ['concat:test', 'mochaTest:unit', 'clean']);
-  grunt.registerTask('test-cli', ['clean', 'lint', 'concat:test', 'mochaTest:cli', 'clean']);
 
-  grunt.registerTask('performance', ['concat:test', 'performancejs', 'clean']);
   grunt.registerTask('build', ['test', 'concat:dist', 'concat:cli', 'uglify:dist', 'uglify:cli', 'endline']);
   grunt.registerTask('build-without-test', ['concat:dist', 'uglify', 'endline']);
-  grunt.registerTask('prep-release', ['build', 'performance', 'generate-changelog']);
+  grunt.registerTask('prep-release', ['build', 'generate-changelog']);
 
   // Default task(s).
   grunt.registerTask('default', ['test']);

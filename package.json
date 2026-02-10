@@ -1,6 +1,6 @@
 {
   "name": "slowdown",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "HTML to Markdown converter (focused fork of Showdown with bug fixes)",
   "author": "Estevão Santos",
   "homepage": "https://github.com/i-a-n/slowdown",

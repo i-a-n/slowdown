@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slowdown Converter - Testing Page</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .main-container {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .options-container {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+        .split-container {
+            display: flex;
+            gap: 1rem;
+            height: 600px;
+        }
+        .input-side, .output-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        #htmlInput {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: none;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            padding: 1rem;
+            height: 100%;
+        }
+        #htmlInput:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        #markdownOutput {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 1rem;
+            height: 100%;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .form-check {
+            padding: 0.25rem 0;
+        }
+        .form-check-label {
+            user-select: none;
+        }
+        .side-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .example-btn {
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <h1 class="mb-2">⚡ Slowdown</h1>
+            <p class="mb-0">HTML to Markdown Converter - Live Testing</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <!-- Options -->
+        <div class="options-container">
+            <h5 class="mb-3">Configuration Options</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="optTables" checked>
+                        <label class="form-check-label" for="optTables">
+                            Enable tables conversion
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="optSimpleLineBreaks">
+                        <label class="form-check-label" for="optSimpleLineBreaks">
+                            Simple line breaks
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="optOpenLinksInNewWindow">
+                        <label class="form-check-label" for="optOpenLinksInNewWindow">
+                            Open links in new window
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input/Output Split -->
+        <div class="split-container">
+            <!-- Left Side: HTML Input -->
+            <div class="input-side">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="side-label">HTML Input</div>
+                    <button class="btn btn-sm btn-outline-primary example-btn" onclick="loadExample()">
+                        Load Example
+                    </button>
+                </div>
+                <textarea id="htmlInput" class="form-control" placeholder="Paste or type HTML here..."></textarea>
+            </div>
+
+            <!-- Right Side: Markdown Output -->
+            <div class="output-side">
+                <div class="side-label mb-2">Markdown Output</div>
+                <div id="markdownOutput"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slowdown Library -->
+    <script src="dist/slowdown.js"></script>
+
+    <!-- Main Script -->
+    <script>
+        // Initialize converter
+        let converter = new slowdown.Converter();
+
+        // Get elements
+        const htmlInput = document.getElementById('htmlInput');
+        const markdownOutput = document.getElementById('markdownOutput');
+        const optTables = document.getElementById('optTables');
+        const optSimpleLineBreaks = document.getElementById('optSimpleLineBreaks');
+        const optOpenLinksInNewWindow = document.getElementById('optOpenLinksInNewWindow');
+
+        // Apply initial options
+        function updateOptions() {
+            converter.setOption('tables', optTables.checked);
+            converter.setOption('simpleLineBreaks', optSimpleLineBreaks.checked);
+            converter.setOption('openLinksInNewWindow', optOpenLinksInNewWindow.checked);
+            convertHTML();
+        }
+
+        // Convert HTML to Markdown
+        function convertHTML() {
+            const html = htmlInput.value;
+            
+            if (!html.trim()) {
+                markdownOutput.textContent = '(no output)';
+                markdownOutput.style.color = '#adb5bd';
+                return;
+            }
+
+            try {
+                // Use window.document for HTML parsing (browser environment)
+                const markdown = converter.makeMarkdown(html);
+                markdownOutput.textContent = markdown;
+                markdownOutput.style.color = '#212529';
+            } catch (error) {
+                markdownOutput.textContent = 'Error: ' + error.message;
+                markdownOutput.style.color = '#dc3545';
+            }
+        }
+
+        // Load example HTML
+        function loadExample() {
+            const exampleHTML = `<h1>Welcome to Slowdown</h1>
+
+<p>This is a <strong>testing page</strong> for the <em>Slowdown</em> HTML to Markdown converter.</p>
+
+<h2>Features</h2>
+
+<ul>
+  <li>Convert <code>HTML</code> to Markdown</li>
+  <li>Live preview</li>
+  <li>Configurable options</li>
+</ul>
+
+<h3>Table Example</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Headers</td>
+      <td>✅ Working</td>
+    </tr>
+    <tr>
+      <td>Lists</td>
+      <td>✅ Working</td>
+    </tr>
+    <tr>
+      <td>Tables</td>
+      <td>✅ Working</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Code Block</h3>
+
+<pre><code>function hello() {
+  console.log("Hello, Slowdown!");
+}</code></pre>
+
+<p>Check out more at <a href="https://github.com/i-a-n/slowdown">GitHub</a>!</p>`;
+            
+            htmlInput.value = exampleHTML;
+            convertHTML();
+        }
+
+        // Event listeners
+        htmlInput.addEventListener('input', convertHTML);
+        optTables.addEventListener('change', updateOptions);
+        optSimpleLineBreaks.addEventListener('change', updateOptions);
+        optOpenLinksInNewWindow.addEventListener('change', updateOptions);
+
+        // Initialize
+        updateOptions();
+        
+        // Show welcome message
+        markdownOutput.textContent = 'Paste HTML in the left panel to see Markdown output here...';
+        markdownOutput.style.color = '#6c757d';
+    </script>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
