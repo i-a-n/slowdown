@@ -1,4 +1,4 @@
-;/*! slowdown v 2.0.0 - 09-02-2026 */
+;/*! slowdown v 2.0.0 - 10-02-2026 */
 (function(){
 /**
  * Created by Tivie on 13-07-2015.
@@ -3324,7 +3324,13 @@ slowdown.subParser('makeMarkdown.node', function (node, options, globals, spansO
       break;
 
     case 'table':
-      if (!spansOnly) { txt = slowdown.subParser('makeMarkdown.table')(node, options, globals) + '\n\n'; }
+      if (!spansOnly) {
+        if (options.tables) {
+          txt = slowdown.subParser('makeMarkdown.table')(node, options, globals) + '\n\n';
+        } else {
+          txt = node.outerHTML + '\n\n';
+        }
+      }
       break;
 
     //

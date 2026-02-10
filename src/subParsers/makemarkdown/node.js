@@ -77,7 +77,13 @@ slowdown.subParser('makeMarkdown.node', function (node, options, globals, spansO
       break;
 
     case 'table':
-      if (!spansOnly) { txt = slowdown.subParser('makeMarkdown.table')(node, options, globals) + '\n\n'; }
+      if (!spansOnly) {
+        if (options.tables) {
+          txt = slowdown.subParser('makeMarkdown.table')(node, options, globals) + '\n\n';
+        } else {
+          txt = node.outerHTML + '\n\n';
+        }
+      }
       break;
 
     //
